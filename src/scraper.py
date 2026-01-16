@@ -56,3 +56,36 @@ def _parse_rating(tag) -> int:
             return rating_map[cls]
     return 0
 
+
+def scrape_page(page_url: str) -> List[Dict]:
+    logger.info("Scraping page: %s", page_url)
+    response = requests.get(page_url, timeout=REQUEST_TIMEOUT)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    products = []
+
+    for article in soup.select["article.product_pod"]:
+        title = article.h3.a["title"].strip()
+        price = article.select_one(".price_color").text.strip()
+        rating = _parse_rating(article.select_one(".star-rating"))
+
+        image_rel_url = article.find("img")["src"]
+        image_url = urljoin(page_url, image_rel_url)
+
+        product_id = _generate_product_id(title, price)
+        image_path = _download_image(image_url, product_id)
+
+        products.append(
+            {
+                "product_id": product_id,
+                "title": title,
+                "price": price,
+                "rating": rating,
+                "image_url": image_url,
+                "image_path": image_path,
+                "source": "books_to_scrape",
+            }        
+        )
+
+    return products
