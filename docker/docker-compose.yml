@@ -1,0 +1,11 @@
+services:
+  scraper:
+    build:
+      context: ..
+      dockerfile: docker/scraper/Dockerfile
+    container_name: sightsearch-scraper
+    volumes:
+      - ../images:/app/images
+    environment:
+      - IMAGE_DIR=/app/images
+    restart: "no"
