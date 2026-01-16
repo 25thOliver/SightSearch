@@ -9,6 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from storage import MongoStorage
+from validators import validate_product
 
 BASE_URL = "https://books.toscrape.com/"
 CATALOGUE_URL = urljoin(BASE_URL, "catalogue/")
@@ -119,6 +120,13 @@ storage = MongoStorage()
 
 if __name__ == "__main__":
     storage = MongoStorage()
+    
     for record in scrape_catalogue(max_pages=2):
+        is_valid, cleaned = validate_product(record)
+
+        if not is_valid:
+            logger.warning("Invalid product skipped: %s", cleaned)
+            continue
+
         storage.upsert_product(record)
         logger.info("Scrapped product: %s", record["title"])
