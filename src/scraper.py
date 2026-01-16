@@ -112,7 +112,7 @@ def scrape_catalogue(max_pages: int = 1) -> Generator[Dict, None, None]:
         if not next_button:
             break
 
-        next_page = next_button("href")
+        next_page = next_button["href"]
         time.sleep(RATE_LIMIT_SECONDS)
 
 storage = MongoStorage()
