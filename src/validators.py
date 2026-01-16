@@ -27,3 +27,10 @@ def validate_product(record: Dict) -> Tuple[bool, Dict]:
     # Normalize price (strip weird encoding, keep numeric)
     price = record["price"]
     price = price.replace("A", "").replace("£", "").strip()
+
+    try:
+        record["price"] = float(price)
+    except ValueError:
+        return False, {"error": f"Invalid price: {record['price']}"}
+    
+    # Enforce rating r
