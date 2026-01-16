@@ -89,3 +89,28 @@ def scrape_page(page_url: str) -> List[Dict]:
         )
 
     return products
+
+
+def scrape_catalogue(max_pages: int = 1) -> Generator[Dict, None, None]:
+    next_page = "page-1.html"
+
+    for _ in range(max_pages):
+        page_url = urljoin(CATALOGUE_URL, next_page)
+        products = scrape_page(page_url)
+
+        for product in products:
+            yield product
+
+        soup = BeautifulSoup(
+            requests.get(page_url, timeout=REQUEST_TIMEOUT).text,
+            "html.parser",
+        )
+        next_button = soup.select_one("li.next a")
+
+        if not next_button:
+            break
+
+        next_page = next_button("href")
+        time.sleep(RATE_LIMIT_SECONDS)
+
+
