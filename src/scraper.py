@@ -114,3 +114,6 @@ def scrape_catalogue(max_pages: int = 1) -> Generator[Dict, None, None]:
         time.sleep(RATE_LIMIT_SECONDS)
 
 
+if __name__ == "__main__":
+    for record in scrape_catalogue(max_pages=2):
+        logger.info("Scrapped product: %s", record["title"])
