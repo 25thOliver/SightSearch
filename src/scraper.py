@@ -40,3 +40,19 @@ def _download_image(image_url: str, product_id: str) -> str:
 
 
     return image_path
+
+
+def _parse_rating(tag) -> int:
+    rating_map = {
+        "One": 1,
+        "Two": 2,
+        "Three": 3,
+        "Four": 4,
+        "Five": 5,
+    }
+    classes = tag.get("class", [])
+    for cls in classes:
+        if cls in rating_map:
+            return rating_map[cls]
+    return 0
+
