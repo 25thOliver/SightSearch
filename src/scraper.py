@@ -8,6 +8,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+from storage import MongoStorage
+
 BASE_URL = "https://books.toscrape.com/"
 CATALOGUE_URL = urljoin(BASE_URL, "catalogue/")
 IMAGE_DIR = os.getenv("IMAGE_DIR", "images")
@@ -113,7 +115,10 @@ def scrape_catalogue(max_pages: int = 1) -> Generator[Dict, None, None]:
         next_page = next_button("href")
         time.sleep(RATE_LIMIT_SECONDS)
 
+storage = MongoStorage()
 
 if __name__ == "__main__":
+    storage = MongoStorage()
     for record in scrape_catalogue(max_pages=2):
+        storage.upsert_product(record)
         logger.info("Scrapped product: %s", record["title"])
