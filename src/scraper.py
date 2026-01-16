@@ -65,7 +65,7 @@ def scrape_page(page_url: str) -> List[Dict]:
     soup = BeautifulSoup(response.text, "html.parser")
     products = []
 
-    for article in soup.select["article.product_pod"]:
+    for article in soup.select("article.product_pod"):
         title = article.h3.a["title"].strip()
         price = article.select_one(".price_color").text.strip()
         rating = _parse_rating(article.select_one(".star-rating"))
