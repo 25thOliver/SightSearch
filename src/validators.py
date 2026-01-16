@@ -10,3 +10,20 @@ REQUIRED_FIELDS = {
     "rating",
     "source",
 }
+
+def validate_product(record: Dict) -> Tuple[bool, Dict]:
+    """
+    Validates and normalizes a product record.
+    Returns (is_valid, cleaned_record)
+    """
+
+    missing = REQUIRED_FIELDS - record.keys()
+    if missing:
+        return False, {"error": f"Missing fields: {missing}"}
+    
+    if not record["image_path"]:
+        return False, {"error": "Missing image_path"}
+    
+    # Normalize price (strip weird encoding, keep numeric)
+    price = record["price"]
+    price = price.replace("A", "").replace("£", "").strip()
