@@ -18,3 +18,4 @@ class MongoStorage:
             {"$set": record},
             upsert=True,
         )
+        print(f"[MongoDB] Upserted {record['product_id']}")
