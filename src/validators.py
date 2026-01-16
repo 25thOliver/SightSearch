@@ -33,4 +33,10 @@ def validate_product(record: Dict) -> Tuple[bool, Dict]:
     except ValueError:
         return False, {"error": f"Invalid price: {record['price']}"}
     
-    # Enforce rating r
+    # Enforce rating range
+    if not (1 <= record["rating"] <= 5):
+        return False, {"error": f"Invalid rating: {record['rating']}"}
+    
+    record["validated_at"] = datetime.utcnow()
+
+    return True, record
