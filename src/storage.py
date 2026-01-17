@@ -1,6 +1,7 @@
 import os
 from pymongo import MongoClient
 from pymongo.collection import Collection
+from datetime import datetime
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 MONGO_DB = os.getenv("MONGO_DB", "sightsearch")
@@ -19,3 +20,11 @@ class MongoStorage:
             upsert=True,
         )
         print(f"[MongoDB] Upserted {record['product_id']}")
+
+    def insert_rejected(self, record: dict, error: dict) -> None:
+        payload = {
+            "record": record,
+            "error": error,
+            "rejected_at": datetime.utcnow(),
+        }
+        self.db.rejected_products.insert_one(payload)
