@@ -61,6 +61,24 @@ services:
     depends_on:
       - airflow-webserver
 
+  airflow-api-server:
+    image: apache/airflow:3.0.2
+    container_name: sightsearch-airflow-api
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: "Dm6J-pxt-br2dGWdJQPeyBoFcLIPS5zipKnf7ZRgO9A="
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    command: api-server
+    ports:
+      - "8081:8080"
+    depends_on:
+      - airflow-webserver
+
 
 volumes:
   mongo-data:
