@@ -41,7 +41,7 @@ services:
       - ./airflow/plugins:/opt/airflow/plugins
     command: scheduler
     depends_on:
-      - airflow-webserver
+      - airflow-api-server
 
   airflow-api-server:
     image: apache/airflow:3.0.2
