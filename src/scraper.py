@@ -120,12 +120,13 @@ storage = MongoStorage()
 
 if __name__ == "__main__":
     storage = MongoStorage()
-    
+
     for record in scrape_catalogue(max_pages=2):
         is_valid, cleaned = validate_product(record)
 
         if not is_valid:
             logger.warning("Invalid product skipped: %s", cleaned)
+            storage.insert_rejected(record, cleaned)
             continue
 
         storage.upsert_product(record)
