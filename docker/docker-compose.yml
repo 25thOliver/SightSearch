@@ -41,8 +41,8 @@ services:
       - "8080:8080"
     command: webserver
     depends_on:
-      - sightsearch-mongodb
-      - sightsearch-scraper
+      - mongodb
+      - scraper
 
   # Airflow Scheduler
   airflow-scheduler:
