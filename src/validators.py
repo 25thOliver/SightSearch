@@ -1,5 +1,6 @@
 from typing import Dict, Tuple
 from datetime import datetime
+import re
 
 REQUIRED_FIELDS = {
     "product_id",
@@ -25,13 +26,14 @@ def validate_product(record: Dict) -> Tuple[bool, Dict]:
         return False, {"error": "Missing image_path"}
     
     # Normalize price (strip weird encoding, keep numeric)
-    price = record["price"]
-    price = price.replace("A", "").replace("£", "").strip()
+    raw_price = record["price"]
 
-    try:
-        record["price"] = float(price)
-    except ValueError:
-        return False, {"error": f"Invalid price: {record['price']}"}
+    # Extract numeric value safely
+    match = re.search(r"([\d]+(?:\.\d+)?)", raw_price)
+    if not match:
+        return False, {"error": f"Invalid price: {raw_price}"}
+    
+    record["price"] = float(match.group(1))
     
     # Enforce rating range
     if not (1 <= record["rating"] <= 5):
