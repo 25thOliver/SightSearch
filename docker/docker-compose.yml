@@ -24,8 +24,6 @@ services:
     volumes:
       - mongo-data:/data/db
 
-      - scraper
-
   # Airflow Scheduler
   airflow-scheduler:
     image: apache/airflow:3.0.2
