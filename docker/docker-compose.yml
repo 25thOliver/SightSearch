@@ -24,5 +24,43 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  # Airflow Webserver
+  airflow-webserver:
+    image: apache/airflow:3.0.2
+    container_name: sightsearch-airflow-web
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: "Dm6J-pxt-br2dGWdJQPeyBoFcLIPS5zipKnf7ZRgO9A="
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    ports:
+      - "8080:8080"
+    command: webserver
+    depends_on:
+      - sightsearch-mongodb
+      - sightsearch-scraper
+
+  # Airflow Scheduler
+  airflow-scheduler:
+    image: apache/airflow:3.0.2
+    container_name: sightsearch-airflow-scheduler
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: "YOUR_FERNET_KEY_HERE"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    command: scheduler
+    depends_on:
+      - airflow-webserver
+
+
 volumes:
   mongo-data:
