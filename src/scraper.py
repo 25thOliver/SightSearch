@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from storage import MongoStorage
 from validators import validate_product
+from image_processing import extract_image_metadata
 
 BASE_URL = "https://books.toscrape.com/"
 CATALOGUE_URL = urljoin(BASE_URL, "catalogue/")
@@ -122,6 +123,12 @@ if __name__ == "__main__":
     storage = MongoStorage()
 
     for record in scrape_catalogue(max_pages=2):
+        try:
+            metadata = extract_image_metadata(record["image_path"])
+            record.update(metadata)
+        except Exception as e:
+            logger.warning("Image processing failed: %s", e)
+
         is_valid, cleaned = validate_product(record)
 
         if not is_valid:
@@ -129,5 +136,5 @@ if __name__ == "__main__":
             storage.insert_rejected(record, cleaned)
             continue
 
-        storage.upsert_product(record)
+        storage.upsert_product(cleaned)
         logger.info("Scrapped product: %s", record["title"])
