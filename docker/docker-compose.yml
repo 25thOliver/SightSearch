@@ -34,6 +34,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
     volumes:
+      - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
@@ -51,6 +52,7 @@ services:
       AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
       AIRFLOW__API__ENABLE_UI: "True"
     volumes:
+      - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
@@ -63,3 +65,4 @@ services:
 
 volumes:
   mongo-data:
+  airflow-db:
