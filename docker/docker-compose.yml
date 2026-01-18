@@ -1,4 +1,14 @@
+version: "3.8"
+
 services:
+  mongodb:
+    image: mongo:7.0
+    container_name: sightsearch-mongodb
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo-data:/data/db
+
   scraper:
     build:
       context: ..
@@ -16,50 +26,40 @@ services:
       - 8.8.4.4
     restart: "no"
 
-  mongodb:
-    image: mongo:7.0
-    container_name: sightsearch-mongodb
-    ports:
-      - "27020:27017"
-    volumes:
-      - mongo-data:/data/db
-
-  # Airflow Scheduler
-  airflow-webserver:
+  airflow-init:
     image: apache/airflow:3.0.2
-    container_name: sightsearch-airflow-webserver
-    restart: always
+    container_name: sightsearch-airflow-init
+    entrypoint: /bin/bash
+    command: >
+      -c "airflow db migrate && python3 /opt/airflow/airflow-init.py"
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      AIRFLOW__WEBSERVER__AUTHENTICATE: "False"
-      AIRFLOW__WEBSERVER__RBAC: "False"
+      AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
+      AIRFLOW__API__ENABLE_UI: "True"
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-    command: webserver
-    ports:
-      - "8080:8080"
+      - ./airflow-init.py:/opt/airflow/airflow-init.py
+
 
   airflow-scheduler:
     image: apache/airflow:3.0.2
     container_name: sightsearch-airflow-scheduler
     restart: always
+    depends_on:
+      - airflow-webserver
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
+      AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
+      AIRFLOW__API__ENABLE_UI: "True"
+    command: scheduler
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-    command: scheduler
-    depends_on:
-      - airflow-webserver
-
 
 volumes:
   mongo-data:
