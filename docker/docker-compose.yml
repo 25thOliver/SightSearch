@@ -25,23 +25,6 @@ services:
       - mongo-data:/data/db
 
   # Airflow Scheduler
-  airflow-scheduler:
-    image: apache/airflow:3.0.2
-    container_name: sightsearch-airflow-scheduler
-    restart: always
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
-    volumes:
-      - airflow-db:/opt/airflow
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-    command: scheduler
-    depends_on:
-      - airflow-webserver
-
   airflow-webserver:
     image: apache/airflow:3.0.2
     container_name: sightsearch-airflow-webserver
@@ -59,8 +42,23 @@ services:
     command: webserver
     ports:
       - "8080:8080"
+
+  airflow-scheduler:
+    image: apache/airflow:3.0.2
+    container_name: sightsearch-airflow-scheduler
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
+    volumes:
+      - airflow-db:/opt/airflow
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    command: scheduler
     depends_on:
-      - airflow-scheduler
+      - airflow-webserver
 
 
 volumes:
