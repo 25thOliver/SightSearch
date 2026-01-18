@@ -29,7 +29,7 @@ services:
     container_name: sightsearch-airflow-init
     entrypoint: /bin/bash
     command: >
-      -c "airflow db migrate && python3 /opt/airflow/airflow-init.py"
+      -c "airflow db migrate && python3 /opt/airflow/airflow-init.py; exec bash"
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
