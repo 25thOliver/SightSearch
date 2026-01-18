@@ -7,6 +7,18 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  postgres:
+    image: postgres:15
+    container_name: sightsearch-postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   scraper:
     build:
       context: ..
@@ -29,11 +41,17 @@ services:
     container_name: sightsearch-airflow-init
     entrypoint: /bin/sh
     command: >
-      -c "airflow db migrate && python3 /opt/airflow/airflow-init.py; exec sh"
+      -c "sleep 6 \
+      && airflow db init \
+      && airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin \
+      || true"
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__API__ENABLE_UI: "True"
+    depends_on:
+      - postgres
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
@@ -47,8 +65,10 @@ services:
     restart: always
     depends_on:
       - airflow-init
+      - postgres
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__API__ENABLE_UI: "True"
     command: api-server
@@ -66,8 +86,10 @@ services:
     restart: always
     depends_on:
       - airflow-webserver
+      - postgres
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__API__ENABLE_UI: "True"
     command: scheduler
@@ -80,3 +102,4 @@ services:
 volumes:
   mongo-data:
   airflow-db:
+  postgres-data:
