@@ -56,7 +56,8 @@ services:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/pluginsy
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./docker/airflow-init.py:/opt/airflow/airflow-init.py
 
   airflow-webserver:
     image: apache/airflow:3.0.2
