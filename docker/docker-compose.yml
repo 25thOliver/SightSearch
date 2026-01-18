@@ -40,27 +40,27 @@ services:
       - ./airflow/plugins:/opt/airflow/plugins
     command: scheduler
     depends_on:
-      - airflow-api-server
+      - airflow-webserver
 
-  airflow-api-server:
+  airflow-webserver:
     image: apache/airflow:3.0.2
-    container_name: sightsearch-airflow-api
+    container_name: sightsearch-airflow-webserver
     restart: always
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.no_auth"
-      AIRFLOW__API__ENABLE_UI: "True"
+      AIRFLOW__WEBSERVER__AUTHENTICATE: "False"
+      AIRFLOW__WEBSERVER__RBAC: "False"
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-    command: api-server
+    command: webserver
     ports:
-      - "8081:8080"
+      - "8080:8080"
     depends_on:
-      - mongodb
+      - airflow-scheduler
 
 
 volumes:
