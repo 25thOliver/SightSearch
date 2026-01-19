@@ -76,7 +76,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       _AIRFLOW_WWW_USER_USERNAME: admin
       _AIRFLOW_WWW_USER_PASSWORD: admin
-    command: webserver
+    command: api-server
     ports:
       - "8080:8080"
     volumes:
