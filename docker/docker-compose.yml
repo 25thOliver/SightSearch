@@ -47,7 +47,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.default
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.allow_all
     depends_on:
       - postgres
     volumes:
@@ -67,7 +67,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.default
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.allow_all
     command: api-server
     ports:
       - "8080:8080"
@@ -87,7 +87,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.default
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.allow_all
     command: scheduler
     volumes:
       - airflow-db:/opt/airflow
