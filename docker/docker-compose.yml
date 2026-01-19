@@ -37,7 +37,7 @@ services:
     restart: "no"
 
   airflow-init:
-    image: apache/airflow:3.2.0
+    image: apache/airflow:3.1.6
     container_name: sightsearch-airflow-init
     entrypoint: /bin/sh
     command: >
@@ -58,7 +58,7 @@ services:
       - ./airflow-init.py:/opt/airflow/airflow-init.py
 
   airflow-webserver:
-    image: apache/airflow:3.2.0
+    image: apache/airflow:3.1.6
     container_name: sightsearch-airflow-webserver
     restart: always
     depends_on:
@@ -78,7 +78,7 @@ services:
       - ./airflow/plugins:/opt/airflow/plugins
 
   airflow-scheduler:
-    image: apache/airflow:3.2.0
+    image: apache/airflow:3.1.6
     container_name: sightsearch-airflow-scheduler
     restart: always
     depends_on:
