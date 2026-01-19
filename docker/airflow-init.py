@@ -1,5 +1,6 @@
+#!/usr/bin/env python3
 # airflow-init.py
-from airflow.api.auth.backend.basic_auth import hashed_password
+from airflow.auth.backends.basic import hashed_password
 from airflow import settings
 from airflow.models import User
 
