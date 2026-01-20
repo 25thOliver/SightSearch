@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from airflow import DAG
 from airflow.decorators import task
  
@@ -25,7 +24,7 @@ with DAG(
     
     @task
     def scrape():
-        return scrape_catalogue_list(max_pages=2)
+        return scrape_catalogue(max_pages=2)
     
     @task
     def image_processing(products):
