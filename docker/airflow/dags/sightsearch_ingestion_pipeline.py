@@ -57,7 +57,8 @@ with DAG(
 
     @task
     def store_rejected(payload):
-        upsert_rejected(payload["rejected"])
+        for item in payload["rejected"]:
+            insert_rejected(item["record"], item["error"])
 
     scraped = scrape()
     processed = image_processing(scraped)
