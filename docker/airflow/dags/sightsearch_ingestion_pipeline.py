@@ -52,7 +52,8 @@ with DAG(
 
     @task
     def store_valid(payload):
-        upsert_product(payload["valid"])
+        for record in payload["valid"]:
+            upsert_product(record)
 
     @task
     def store_rejected(payload):
