@@ -43,7 +43,9 @@ services:
     command:
       - -c
       - |
-        pip install --no-cache-dir apache-airflow-providers-fab
+        pip install --no-cache-dir \
+        apache-airflow-providers-fab \
+        -r /opt/airflow/requirements.airflow.txt
         airflow db migrate
         airflow db reset -y
         airflow db migrate
@@ -63,6 +65,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ../src:/opt/airflow/src 
+      - ../requirements.airflow.txt:/opt/airflow/requirements.airflow.txt
 
   airflow-webserver:
     image: apache/airflow:3.1.6
@@ -75,7 +78,9 @@ services:
     command:
       - -c
       - |
-        pip install --no-cache-dir apache-airflow-providers-fab
+        pip install --no-cache-dir \
+        apache-airflow-providers-fab \
+        -r /opt/airflow/requirements.airflow.txt
         airflow api-server
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -92,6 +97,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ../src:/opt/airflow/src 
+      - ../requirements.airflow.txt:/opt/airflow/requirements.airflow.txt
 
   airflow-scheduler:
     image: apache/airflow:3.1.6
@@ -104,7 +110,9 @@ services:
     command:
       - -c
       - |
-        pip install --no-cache-dir apache-airflow-providers-fab
+        pip install --no-cache-dir \
+        apache-airflow-providers-fab \
+        -r /opt/airflow/requirements.airflow.txt
         airflow scheduler
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -119,6 +127,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ../src:/opt/airflow/src 
+      - ../requirements.airflow.txt:/opt/airflow/requirements.airflow.txt
 
 volumes:
   mongo-data:
