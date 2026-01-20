@@ -2,6 +2,7 @@ from typing import Dict, Tuple
 from datetime import datetime
 import re
 
+from src.models import ProductRecord
 REQUIRED_FIELDS = {
     "product_id",
     "title",
