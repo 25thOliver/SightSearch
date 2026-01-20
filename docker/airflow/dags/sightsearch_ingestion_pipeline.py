@@ -24,7 +24,7 @@ with DAG(
     
     @task
     def scrape():
-        return scrape_catalogue(max_pages=2)
+        return list(scrape_catalogue(max_pages=2))
     
     @task
     def image_processing(products):
@@ -40,11 +40,15 @@ with DAG(
     
     @task
     def validate(products):
-        valid, rejected = validate_product(products)
-        return {
-            "valid": valid,
-            "rejected": rejected,
-        }
+        valid = []
+        rejected = []
+        for p in products:
+            is_valid, cleaned = validate_product(products)
+            if is_valid:
+                valid.append(cleaned)
+            else:
+                rejected.append({"record": p, "error": cleaned})
+        return {"valid": valid, "rejected": rejected}
 
     @task
     def store_valid(payload):
