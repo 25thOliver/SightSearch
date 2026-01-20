@@ -2,6 +2,7 @@ import os
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from datetime import datetime
+from src.config import settings
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 MONGO_DB = os.getenv("MONGO_DB", "sightsearch")
