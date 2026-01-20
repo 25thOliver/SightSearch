@@ -28,7 +28,15 @@ with DAG(
     
     @task
     def image_processing(products):
-        return process_images(products)
+        enriched = []
+        for p in products:
+            try:
+                meta = extract_image_metadata(p["image_path"])
+                p.update(meta)
+            except Exception as e:
+                p["image_metadata_error"] = str(e)
+            enriched.append(p)
+        return enriched
     
     @task
     def validate(products):
