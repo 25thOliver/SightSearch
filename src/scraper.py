@@ -8,9 +8,9 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-from storage import MongoStorage
-from validators import validate_product
-from image_processing import extract_image_metadata
+from src.storage import MongoStorage
+from src.validators import validate_product
+from src.image_processing import extract_image_metadata
 
 BASE_URL = "https://books.toscrape.com/"
 CATALOGUE_URL = urljoin(BASE_URL, "catalogue/")
