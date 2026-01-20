@@ -37,17 +37,14 @@ services:
     restart: "no"
 
   airflow-init:
-    image: apache/airflow:3.1.6
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
     container_name: sightsearch-airflow-init
     entrypoint: /bin/bash
     command:
       - -c
       - |
-        pip install --no-cache-dir apache-airflow-providers-fab
-        if [ -f /opt/airflow/requirements.airflow.txt ]; then
-          echo "Installing requirements from requirements.airflow.txt..."
-          pip install --no-cache-dir -r /opt/airflow/requirements.airflow.txt
-        fi
         airflow db migrate
         airflow db reset -y
         airflow db migrate
@@ -73,24 +70,15 @@ services:
       - ../requirements.airflow.txt:/opt/airflow/requirements.airflow.txt
 
   airflow-webserver:
-    image: apache/airflow:3.1.6
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
     container_name: sightsearch-airflow-webserver
     restart: always
     depends_on:
       airflow-init:
         condition: service_completed_successfully
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - |
-        pip install --no-cache-dir apache-airflow-providers-fab
-        if [ -f /opt/airflow/requirements.airflow.txt ]; then
-          echo "Installing requirements from requirements.airflow.txt..."
-          pip install --no-cache-dir -r /opt/airflow/requirements.airflow.txt
-          echo "Installed packages:"
-          pip list | grep -E "pymongo|requests|beautifulsoup4|Pillow|imagehash"
-        fi
-        airflow api-server
+    command: api-server
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
@@ -112,22 +100,15 @@ services:
       - ../requirements.airflow.txt:/opt/airflow/requirements.airflow.txt
 
   airflow-scheduler:
-    image: apache/airflow:3.1.6
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
     container_name: sightsearch-airflow-scheduler
     restart: always
     depends_on:
       airflow-init:
         condition: service_completed_successfully
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - |
-        pip install --no-cache-dir apache-airflow-providers-fab
-        if [ -f /opt/airflow/requirements.airflow.txt ]; then
-          echo "Installing requirements from requirements.airflow.txt..."
-          pip install --no-cache-dir -r /opt/airflow/requirements.airflow.txt
-        fi
-        airflow scheduler
+    command: scheduler
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
