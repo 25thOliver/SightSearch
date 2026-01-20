@@ -6,7 +6,7 @@ from airflow.decorators import task
 from src.scraper import scrape_catalogue
 from src.image_processing import extract_image_metadata
 from src.validators import validate_product
-from src.storage import upsert_product, insert_rejected
+from src.storage import MongoStorage
 
 DEFAULT_ARGS = {
     "owner": "sightsearch",
