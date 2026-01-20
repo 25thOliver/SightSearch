@@ -5,6 +5,8 @@ from datetime import datetime
 from PIL import Image
 import imagehash
 
+from src.config import settings
+
 logger = logging.getLogger(__name__)
 
 def extract_image_metadata(image_path: str) -> dict:
