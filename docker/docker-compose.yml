@@ -31,8 +31,6 @@ services:
       - ../images:/app/images
     depends_on:
       - mongodb
-    depends_on:
-      - mongodb
     restart: "no"
 
   airflow-init:
@@ -60,9 +58,6 @@ services:
       IMAGE_DIR: /opt/airflow/images
     depends_on:
       - postgres
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
@@ -121,9 +116,6 @@ services:
       MONGO_URI: mongodb://mongodb:27017
       MONGO_DB: sightsearch
       IMAGE_DIR: /opt/airflow/images
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
