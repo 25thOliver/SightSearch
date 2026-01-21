@@ -56,6 +56,9 @@ services:
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       PYTHONPATH: /opt/airflow
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: sightsearch
+      IMAGE_DIR: /opt/airflow/images
     depends_on:
       - postgres
     dns:
@@ -86,6 +89,9 @@ services:
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       PYTHONPATH: /opt/airflow
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: sightsearch
+      IMAGE_DIR: /opt/airflow/images
     dns:
       - 8.8.8.8
       - 8.8.4.4
@@ -116,6 +122,9 @@ services:
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       PYTHONPATH: /opt/airflow
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: sightsearch
+      IMAGE_DIR: /opt/airflow/images
     dns:
       - 8.8.8.8
       - 8.8.4.4
