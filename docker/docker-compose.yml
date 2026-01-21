@@ -31,9 +31,8 @@ services:
       - ../images:/app/images
     depends_on:
       - mongodb
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+    depends_on:
+      - mongodb
     restart: "no"
 
   airflow-init:
@@ -92,9 +91,6 @@ services:
       MONGO_URI: mongodb://mongodb:27017
       MONGO_DB: sightsearch
       IMAGE_DIR: /opt/airflow/images
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     ports:
       - "8080:8080"
     volumes:
