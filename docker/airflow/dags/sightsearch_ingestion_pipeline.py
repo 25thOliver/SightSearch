@@ -43,7 +43,7 @@ with DAG(
         valid = []
         rejected = []
         for p in products:
-            is_valid, cleaned = validate_product(products)
+            is_valid, cleaned = validate_product(p)
             if is_valid:
                 valid.append(cleaned)
             else:
@@ -52,13 +52,15 @@ with DAG(
 
     @task
     def store_valid(payload):
+        storage = MongoStorage()
         for record in payload["valid"]:
-            upsert_product(record)
+            storage.upsert_product(record)
 
     @task
     def store_rejected(payload):
+        storage = MongoStorage()
         for item in payload["rejected"]:
-            insert_rejected(item["record"], item["error"])
+            storage.insert_rejected(item["record"], item["error"])
 
     scraped = scrape()
     processed = image_processing(scraped)
