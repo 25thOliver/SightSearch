@@ -116,6 +116,7 @@ services:
       MONGO_URI: mongodb://mongodb:27017
       MONGO_DB: sightsearch
       IMAGE_DIR: /opt/airflow/images
+      AIRFLOW__API__BASE_URL: http://airflow-webserver:8080
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
