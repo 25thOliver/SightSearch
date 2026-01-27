@@ -114,7 +114,11 @@ services:
       MONGO_URI: ${MONGO_URI}
       MONGO_DB: ${MONGO_DB}
       IMAGE_DIR: /opt/airflow/images
+      MONGO_DB: ${MONGO_DB}
+      IMAGE_DIR: /opt/airflow/images
       AIRFLOW__API__BASE_URL: http://airflow-webserver:8080
+      AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 10
+      AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 5
     volumes:
       - airflow-db:/opt/airflow
       - ./airflow/dags:/opt/airflow/dags
