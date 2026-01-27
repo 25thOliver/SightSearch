@@ -106,6 +106,29 @@ Once the services are running (wait a minute or two for initialization):
 
 ---
 
+## Project Structure
+
+```text
+sightsearch/
+├── docker/                 # Docker configuration files
+│   ├── airflow/            # Airflow-specific Dockerfile and configs
+│   │   └── dags/           # Airflow Directed Acyclic Graphs (DAGs)
+│   ├── scraper/            # Scraper-specific Dockerfile
+│   ├── docker-compose.yml  # Service orchestration
+│   └── .env                # (Created by you) Secrets and env vars
+├── src/                    # Application source code
+│   ├── scraper.py          # Web scraping logic
+│   ├── image_processing.py # Image metadata extraction
+│   ├── storage.py          # Database interactions
+│   └── validators.py       # Data validation logic
+├── tests/                  # Unit tests
+├── images/                 # Downloaded product images
+├── requirements.airflow.txt # Python dependencies for Airflow
+└── README.md               # This file
+```
+
+---
+
 ## Contributing
 
 Contributions are welcome! If you have suggestions for improvements or new features:
