@@ -89,3 +89,19 @@ Once the services are running (wait a minute or two for initialization):
     - **Password**: `admin`
 
 ---
+
+## Usage
+
+1.  **Trigger the Pipeline**:
+    - In the Airflow UI, find the DAG named `sightsearch_ingestion_pipeline`.
+    - Toggle the switch to **Unpause** the DAG.
+    - Click the **Play** button (Trigger DAG) to start a manual run.
+
+2.  **Monitor Progress**:
+    - Click on the DAG ID to view the Grid/Graph view.
+    - Watch as tasks (`scrape`, `image_processing`, `validate`, `store_valid`) turn dark green (success).
+
+3.  **Verify Data**:
+    - You can connect to the MongoDB instance on port `27020` to inspect the ingested data in the `sightsearch.products` collection.
+
+---
