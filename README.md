@@ -105,3 +105,15 @@ Once the services are running (wait a minute or two for initialization):
     - You can connect to the MongoDB instance on port `27020` to inspect the ingested data in the `sightsearch.products` collection.
 
 ---
+
+## Contributing
+
+Contributions are welcome! If you have suggestions for improvements or new features:
+
+1.  Fork the repository.
+2.  Create a feature branch (`git checkout -b feature/AmazingFeature`).
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4.  Push to the branch (`git push origin feature/AmazingFeature`).
+5.  Open a Pull Request.
+
+---
