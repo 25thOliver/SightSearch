@@ -17,3 +17,12 @@ Built with **Apache Airflow**, **Docker**, and **Python**, SightSearch orchestra
     - **PostgreSQL**: Manages Airflow's internal state.
 
 ---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your machine:
+
+- **[Docker](https://docs.docker.com/get-docker/)**: For running the containerized services.
+- **[Docker Compose](https://docs.docker.com/compose/install/)**: For orchestration of the multi-container environment.
+
+---
